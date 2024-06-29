@@ -3,6 +3,7 @@ import CreateTask from "../CreateTask/CreateTask";
 import SingleTask from "../SingleTask/SingleTask";
 import axios from "axios";
 import CreateTaskForm from "../CreateTask/CreateTaskForm";
+import Loader from "../Loader/Loader";
 
 function TaskList() {
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,11 @@ function TaskList() {
       })
         .then((response) => {
           setLoading(false);
-          setTasks(response.data);
+          if (response?.data) {
+            setTasks(response?.data);
+          } else {
+            setTasks([]);
+          }
         })
         .catch((err) => {
           setLoading(false);
@@ -36,7 +41,9 @@ function TaskList() {
     <div className="row">
       <div className="row">
         <div className="col-md-4 col-sm-12">
-          <CreateTask setOpenCreateTask={setOpenCreateTask} />
+          {tasks?.length < 50 && (
+            <CreateTask setOpenCreateTask={setOpenCreateTask} />
+          )}
         </div>
       </div>
       <div className="row">
@@ -59,12 +66,25 @@ function TaskList() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              fontSize:'30px',
-              color:'#fff',
-              height:'200px'
+              fontSize: "30px",
+              color: "#fff",
+              height: "200px",
             }}
           >
             No Tasks Found !
+          </div>
+        )}
+        {loading && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+
+              height: "200px",
+            }}
+          >
+            <Loader />
           </div>
         )}
       </div>

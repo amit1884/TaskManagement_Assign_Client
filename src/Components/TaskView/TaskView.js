@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "../CreateTask/Modal/Modal";
 import styles from "./taskview.module.css";
 import { formatDate } from "../../utitlity";
+import Loader from "../Loader/Loader";
 function TaskView({ id, setOpen }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
@@ -32,30 +33,42 @@ function TaskView({ id, setOpen }) {
   return (
     <Modal setOpen={setOpen} customCardClass={styles.customCard}>
       <div className={styles.taskHeader}>Task Details</div>
-      <div className={styles.taskDetails}>
-        <table className={styles.taskTable}>
-          <tr>
-            <th>Id</th>
-            <td>{data?._id}</td>
-          </tr>
-          <tr>
-            <th>Title</th>
-            <td>{data?.title}</td>
-          </tr>
-          <tr>
-            <th>Description</th>
-            <td>{data?.description}</td>
-          </tr>
-          <tr>
-            <th>Status</th>
-            <td>{data?.status}</td>
-          </tr>
-          <tr>
-            <th>Due Date</th>
-            <td>{formatDate(data?.dueDate)}</td>
-          </tr>
-        </table>
-      </div>
+      {!loading && (
+        <div className={styles.taskDetails}>
+          <table className={styles.taskTable}>
+            <tr>
+              <th>Id</th>
+              <td>{data?._id}</td>
+            </tr>
+            <tr>
+              <th>Title</th>
+              <td>{data?.title}</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>{data?.description}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td>{data?.status}</td>
+            </tr>
+            <tr>
+              <th>Due Date</th>
+              <td>{formatDate(data?.dueDate)}</td>
+            </tr>
+          </table>
+        </div>
+      )}
+      {loading && (
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+
+        }}>
+          <Loader width="60px" height="60px"/>
+        </div>
+      )}
     </Modal>
   );
 }
